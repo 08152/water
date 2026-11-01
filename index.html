@@ -6,15 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BUNKER - ONE MILLION COINS</title>
 
-<script type="importmap">
-{
-  "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
-  }
-}
-</script>
-
 <style>
 * {
     margin: 0;
@@ -24,7 +15,7 @@
 
 body {
     overflow: hidden;
-    background: #080a0d;
+    background: #090b10;
     font-family: Arial, sans-serif;
     color: white;
 }
@@ -33,158 +24,234 @@ canvas {
     display: block;
 }
 
-#ui {
+#hud {
     position: fixed;
     inset: 0;
     pointer-events: none;
+    z-index: 10;
 }
 
-#top {
+#title {
     position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    background: rgba(0,0,0,.75);
-    padding: 15px 35px;
-    border: 1px solid #b88625;
-    border-radius: 8px;
+    top: 22px;
+    left: 25px;
+    font-size: 21px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    color: #ffd45b;
+    text-shadow: 0 2px 10px black;
 }
 
-#top h1 {
-    font-size: 22px;
+#subtitle {
+    font-size: 10px;
+    color: white;
     letter-spacing: 4px;
-    color: #ffc83d;
+    margin-top: 5px;
 }
 
-#top p {
-    font-size: 11px;
-    color: #aaa;
-    margin-top: 6px;
-    letter-spacing: 2px;
-}
-
-#counter {
+#coin-counter {
     position: absolute;
-    top: 20px;
-    left: 20px;
-    background: rgba(0,0,0,.8);
-    border: 1px solid #b88625;
+    top: 25px;
+    right: 25px;
+    padding: 13px 20px;
+    background: rgba(0,0,0,0.7);
+    border: 1px solid #bd8d28;
     border-radius: 8px;
-    padding: 15px 20px;
+    text-align: right;
 }
 
-#counter small {
-    color: #aaa;
-    font-size: 11px;
+#coin-counter small {
+    display: block;
+    color: #d4ad54;
+    font-size: 10px;
     letter-spacing: 2px;
 }
 
 #coins {
-    color: #ffd34e;
-    font-size: 29px;
+    font-size: 23px;
     font-weight: bold;
+    color: #ffdc69;
     margin-top: 5px;
 }
 
-#bottom {
+#fps {
     position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,.75);
-    padding: 12px 25px;
-    border-radius: 8px;
-    color: #ddd;
-    font-size: 13px;
-    white-space: nowrap;
+    top: 105px;
+    right: 25px;
+    color: #9cdda3;
+    font-size: 11px;
+    text-shadow: 0 2px 5px black;
 }
 
 #crosshair {
     position: absolute;
     left: 50%;
     top: 50%;
-    width: 6px;
-    height: 6px;
-    background: white;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    border: 2px solid white;
     border-radius: 50%;
-    transform: translate(-50%,-50%);
+    box-shadow: 0 0 5px black;
 }
 
-#hint {
+#help {
     position: absolute;
-    left: 50%;
-    top: 58%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,.8);
-    padding: 12px 20px;
-    border-radius: 6px;
-    font-size: 13px;
-    color: #ffd34e;
-    text-align: center;
+    left: 25px;
+    bottom: 25px;
+    background: rgba(0,0,0,0.7);
+    padding: 13px 17px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.15);
+    font-size: 12px;
+    line-height: 1.9;
 }
 
-#loading {
+#help strong {
+    color: #ffd45b;
+}
+
+#start-screen, #loading {
     position: fixed;
     inset: 0;
     display: flex;
-    justify-content: center;
     align-items: center;
-    background: #080a0d;
-    color: #ffd34e;
-    z-index: 20;
-    font-size: 18px;
+    justify-content: center;
+    background: rgba(0,0,0,0.92);
+    z-index: 100;
+    text-align: center;
 }
 
+#start-screen {
+    display: none;
+}
+
+#start-box {
+    padding: 35px;
+    background: #11151d;
+    border: 1px solid #bd8d28;
+    border-radius: 15px;
+    width: min(440px, 90vw);
+}
+
+#start-box h1, #loading h1 {
+    color: #ffcf4d;
+    font-size: 30px;
+    letter-spacing: 3px;
+    margin-bottom: 15px;
+}
+
+#start-box p {
+    color: #bbb;
+    line-height: 1.7;
+    font-size: 13px;
+}
+
+#start-button {
+    margin-top: 22px;
+    padding: 14px 30px;
+    border: 0;
+    border-radius: 7px;
+    background: linear-gradient(135deg, #ffdf70, #b77b12);
+    color: #17110a;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+#loading-bar {
+    width: min(350px, 80vw);
+    height: 9px;
+    background: #252525;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 15px auto;
+}
+
+#loading-progress {
+    width: 10%;
+    height: 100%;
+    background: linear-gradient(90deg, #b77b12, #ffe58a);
+    transition: width 0.3s;
+}
+
+#loading-text {
+    color: #aaa;
+    font-size: 12px;
+}
 </style>
+
+<script type="importmap">
+{
+    "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    }
+}
+</script>
 </head>
 
 <body>
 
-<div id="loading">BUNKER WIRD GELADEN ...</div>
-
-<div id="ui">
-
-    <div id="top">
+<div id="loading">
+    <div>
         <h1>BUNKER</h1>
-        <p>ONE MILLION COINS</p>
+        <div id="loading-bar">
+            <div id="loading-progress"></div>
+        </div>
+        <div id="loading-text">Spiel wird vorbereitet ...</div>
+    </div>
+</div>
+
+<div id="hud">
+
+    <div id="title">
+        BUNKER
+        <div id="subtitle">ONE MILLION COINS</div>
     </div>
 
-    <div id="counter">
+    <div id="coin-counter">
         <small>TOTAL COINS</small>
         <div id="coins">1.000.000</div>
     </div>
 
+    <div id="fps">FPS werden gemessen ...</div>
+
     <div id="crosshair"></div>
 
-    <div id="hint">
-        Klicke ins Spiel, um die Maussteuerung zu aktivieren
-    </div>
-
-    <div id="bottom">
-        WASD = Laufen | Maus = Umschauen | ESC = Maus lösen
+    <div id="help">
+        <strong>STEUERUNG</strong><br>
+        WASD – Bewegen<br>
+        Maus – Umschauen<br>
+        E – Münze aufheben<br>
+        Q – Münze werfen<br>
+        ESC – Maus freigeben
     </div>
 
 </div>
 
+<div id="start-screen">
+    <div id="start-box">
+        <h1>BUNKER</h1>
+        <p>
+            Eine Million Goldmünzen warten auf dich.<br>
+            Hebe Münzen auf und sammle sie in deinem Inventar.
+        </p>
+        <button id="start-button">SPIEL STARTEN</button>
+    </div>
+</div>
+
 <script type="module">
 
-import * as THREE from 'three';
+import * as THREE from "three";
 
 import { PointerLockControls } from
-'three/addons/controls/PointerLockControls.js';
+    "three/addons/controls/PointerLockControls.js";
 
-import { createCoinField } from './coin.js';
-
-// ========================================
-// KONFIGURATION
-// ========================================
-
-const WALL_HEIGHT = 45;
-
-const PLAYER_HEIGHT = 1.8;
-const PLAYER_RADIUS = 0.32;
-const PLAYER_SPEED = 12;
+import { createCoinField } from "./coin.js";
+import { Inventory } from "./inventar.js";
+import { CoinInteraction } from "./heben.js";
+import { LagOptimizer } from "./lagg.js";
 
 // ========================================
 // SZENE
@@ -192,14 +259,23 @@ const PLAYER_SPEED = 12;
 
 const scene = new THREE.Scene();
 
-scene.background = new THREE.Color(0x10151b);
-scene.fog = new THREE.Fog(0x10151b, 100, 400);
+scene.background = new THREE.Color(0x17191e);
+
+scene.fog = new THREE.Fog(
+    0x17191e,
+    110,
+    260
+);
+
+// ========================================
+// KAMERA
+// ========================================
 
 const camera = new THREE.PerspectiveCamera(
     75,
     window.innerWidth / window.innerHeight,
     0.1,
-    700
+    400
 );
 
 // ========================================
@@ -207,8 +283,11 @@ const camera = new THREE.PerspectiveCamera(
 // ========================================
 
 const renderer = new THREE.WebGLRenderer({
-    antialias: true,
-    powerPreference: "high-performance"
+    antialias: false,
+    powerPreference: "high-performance",
+    stencil: false,
+    depth: true,
+    alpha: false
 });
 
 renderer.setSize(
@@ -217,13 +296,15 @@ renderer.setSize(
 );
 
 renderer.setPixelRatio(
-    Math.min(window.devicePixelRatio, 1.5)
+    Math.min(window.devicePixelRatio, 1)
 );
 
 renderer.outputColorSpace = THREE.SRGBColorSpace;
-
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.15;
+renderer.toneMappingExposure = 1.2;
+
+// Schatten deaktiviert: spart viel Leistung.
+renderer.shadowMap.enabled = false;
 
 document.body.appendChild(renderer.domElement);
 
@@ -231,69 +312,43 @@ document.body.appendChild(renderer.domElement);
 // LICHT
 // ========================================
 
-scene.add(
-    new THREE.HemisphereLight(
-        0xdceaff,
-        0x44301b,
-        2
-    )
+scene.add(new THREE.HemisphereLight(
+    0xc7d8ff,
+    0x33200b,
+    2.0
+));
+
+const mainLight = new THREE.DirectionalLight(
+    0xffe2a0,
+    2.5
 );
 
-const sun = new THREE.DirectionalLight(
-    0xffe1a0,
-    3
-);
-
-sun.position.set(-60, 100, -40);
-scene.add(sun);
+mainLight.position.set(30, 70, 20);
+scene.add(mainLight);
 
 const goldLight = new THREE.PointLight(
-    0xffbb37,
-    1500,
-    180
+    0xffc34b,
+    120,
+    100
 );
 
-goldLight.position.set(0, 30, 0);
+goldLight.position.set(0, 35, 0);
 scene.add(goldLight);
 
-const ceilingLight = new THREE.PointLight(
-    0xd9e7ff,
-    900,
-    140
-);
-
-ceilingLight.position.set(0, 35, 0);
-scene.add(ceilingLight);
-
 // ========================================
-// MATERIALIEN
-// ========================================
-
-const concreteMaterial = new THREE.MeshStandardMaterial({
-    color: 0x343a40,
-    roughness: 0.9,
-    metalness: 0.1
-});
-
-const metalMaterial = new THREE.MeshStandardMaterial({
-    color: 0x202a34,
-    roughness: 0.45,
-    metalness: 0.8
-});
-
-// ========================================
-// BUNKERBODEN
+// BODEN
 // ========================================
 
 const floor = new THREE.Mesh(
-    new THREE.BoxGeometry(
-        210,
-        2,
-        210
-    ),
-    concreteMaterial
+    new THREE.PlaneGeometry(190, 190),
+    new THREE.MeshStandardMaterial({
+        color: 0x393d43,
+        roughness: 0.9,
+        metalness: 0.15
+    })
 );
 
+floor.rotation.x = -Math.PI / 2;
 floor.position.y = -1;
 scene.add(floor);
 
@@ -301,89 +356,108 @@ scene.add(floor);
 // BUNKERWÄNDE
 // ========================================
 
-function createWall(x, z, width, depth) {
+const wallMaterial = new THREE.MeshStandardMaterial({
+    color: 0x424750,
+    roughness: 0.8,
+    metalness: 0.35
+});
+
+function createWall(x, y, z, width, height, depth) {
 
     const wall = new THREE.Mesh(
-        new THREE.BoxGeometry(
-            width,
-            WALL_HEIGHT,
-            depth
-        ),
-        concreteMaterial
+        new THREE.BoxGeometry(width, height, depth),
+        wallMaterial
     );
 
-    wall.position.set(
-        x,
-        WALL_HEIGHT / 2,
-        z
-    );
-
+    wall.position.set(x, y, z);
     scene.add(wall);
-
-    const bars = Math.floor(
-        Math.max(width, depth) / 5
-    );
-
-    for (let i = 0; i <= bars; i++) {
-
-        const bar = new THREE.Mesh(
-            new THREE.BoxGeometry(
-                0.35,
-                WALL_HEIGHT,
-                0.35
-            ),
-            metalMaterial
-        );
-
-        if (width > depth) {
-
-            bar.position.set(
-                x - width / 2 + i * 5,
-                WALL_HEIGHT / 2,
-                z
-            );
-
-        } else {
-
-            bar.position.set(
-                x,
-                WALL_HEIGHT / 2,
-                z - depth / 2 + i * 5
-            );
-
-        }
-
-        scene.add(bar);
-    }
 }
 
-const WALL_OFFSET = 87.5;
-
-createWall(0, -WALL_OFFSET, 185, 2);
-createWall(0, WALL_OFFSET, 185, 2);
-createWall(-WALL_OFFSET, 0, 2, 185);
-createWall(WALL_OFFSET, 0, 2, 185);
+createWall(0, 35, -88, 180, 72, 3);
+createWall(0, 35, 88, 180, 72, 3);
+createWall(-88, 35, 0, 3, 72, 180);
+createWall(88, 35, 0, 3, 72, 180);
 
 // ========================================
-// COINS AUS COIN.JS LADEN
+// WANDSTREBEN
 // ========================================
+
+const beamMaterial = new THREE.MeshStandardMaterial({
+    color: 0x777e87,
+    metalness: 0.8,
+    roughness: 0.35
+});
+
+const beamGeometry = new THREE.BoxGeometry(
+    0.5,
+    70,
+    0.5
+);
+
+for (let i = -80; i <= 80; i += 10) {
+
+    const beam = new THREE.Mesh(
+        beamGeometry,
+        beamMaterial
+    );
+
+    beam.position.set(i, 35, -86.3);
+    scene.add(beam);
+
+    const beam2 = new THREE.Mesh(
+        beamGeometry,
+        beamMaterial
+    );
+
+    beam2.position.set(i, 35, 86.3);
+    scene.add(beam2);
+}
+
+// ========================================
+// MÜNZEN
+// ========================================
+
+const loadingText = document.getElementById("loading-text");
+const loadingProgress = document.getElementById("loading-progress");
+
+loadingText.textContent = "Erstelle die Münzwelt ...";
+
+await new Promise(resolve => requestAnimationFrame(resolve));
 
 const coinField = createCoinField(scene);
 
-const TOP_COIN_Y = coinField.topY;
+loadingProgress.style.width = "100%";
+
+loadingText.textContent = "Münzwelt bereit!";
 
 document.getElementById("coins").textContent =
     coinField.total.toLocaleString("de-DE");
 
-// Spieler startet auf der obersten Münzschicht
+// ========================================
+// LAG OPTIMIERUNG
+// ========================================
+
+const lagOptimizer = new LagOptimizer(
+    renderer,
+    coinField,
+    document.getElementById("fps")
+);
+
+// ========================================
+// SPIELER
+// ========================================
+
+const PLAYER_HEIGHT = 1.8;
+const PLAYER_RADIUS = 0.32;
+
 camera.position.set(
     0,
-    TOP_COIN_Y + PLAYER_HEIGHT,
+    coinField.topY + PLAYER_HEIGHT,
     0
 );
 
 // ========================================
-// FIRST PERSON
+// STEUERUNG
 // ========================================
 
 const controls = new PointerLockControls(
@@ -391,119 +465,144 @@ const controls = new PointerLockControls(
     document.body
 );
 
-document.addEventListener("click", () => {
+const startScreen = document.getElementById("start-screen");
 
-    if (!controls.isLocked) {
-        controls.lock();
-    }
-
-});
+document.getElementById("start-button").addEventListener(
+    "click",
+    () => controls.lock()
+);
 
 controls.addEventListener("lock", () => {
-    document.getElementById("hint").style.display = "none";
+    startScreen.style.display = "none";
 });
 
 controls.addEventListener("unlock", () => {
-    document.getElementById("hint").style.display = "block";
+    startScreen.style.display = "flex";
 });
 
 // ========================================
-// STEUERUNG
+// INVENTAR
 // ========================================
 
-const keys = {};
+const inventory = new Inventory(7);
 
-window.addEventListener("keydown", e => {
-    keys[e.code] = true;
+// ========================================
+// MÜNZEN AUFHEBEN UND WERFEN
+// ========================================
+
+const coinInteraction = new CoinInteraction(
+    scene,
+    camera,
+    controls,
+    coinField,
+    inventory
+);
+
+// ========================================
+// BEWEGUNG
+// ========================================
+
+const keys = {
+    w: false,
+    a: false,
+    s: false,
+    d: false
+};
+
+window.addEventListener("keydown", event => {
+    const key = event.key.toLowerCase();
+
+    if (key in keys) {
+        keys[key] = true;
+    }
 });
 
-window.addEventListener("keyup", e => {
-    keys[e.code] = false;
+window.addEventListener("keyup", event => {
+    const key = event.key.toLowerCase();
+
+    if (key in keys) {
+        keys[key] = false;
+    }
 });
 
-const velocity = new THREE.Vector3();
-const direction = new THREE.Vector3();
-
-function updatePlayer(delta) {
+function movePlayer(delta) {
 
     if (!controls.isLocked) return;
 
-    direction.set(0, 0, 0);
+    const speed = 9 * delta;
 
-    if (keys["KeyW"]) direction.z -= 1;
-    if (keys["KeyS"]) direction.z += 1;
-    if (keys["KeyA"]) direction.x -= 1;
-    if (keys["KeyD"]) direction.x += 1;
+    let moveX = 0;
+    let moveZ = 0;
 
-    direction.normalize();
+    if (keys.w) moveZ += speed;
+    if (keys.s) moveZ -= speed;
+    if (keys.a) moveX -= speed;
+    if (keys.d) moveX += speed;
 
-    velocity.set(0, 0, 0);
+    const oldX = camera.position.x;
+    const oldZ = camera.position.z;
 
-    if (direction.lengthSq() > 0) {
+    if (moveX !== 0) {
 
-        const forward = new THREE.Vector3();
-        const right = new THREE.Vector3();
+        controls.moveRight(moveX);
 
-        controls.getDirection(forward);
-
-        forward.y = 0;
-        forward.normalize();
-
-        right.crossVectors(
-            forward,
-            camera.up
-        ).normalize();
-
-        velocity.addScaledVector(
-            forward,
-            -direction.z
-        );
-
-        velocity.addScaledVector(
-            right,
-            direction.x
-        );
-
-        velocity.normalize();
-        velocity.multiplyScalar(PLAYER_SPEED * delta);
-
-        const player = controls.getObject();
-
-        const nextX = player.position.x + velocity.x;
-        const nextZ = player.position.z + velocity.z;
-
-        // Münz-Hitboxen aus coin.js
-        // Der Spieler kann nur dort laufen,
-        // wo die obersten Münzen ihn tragen.
-
-        if (
-            coinField.canStandAt(
-                nextX,
-                player.position.z,
-                PLAYER_RADIUS
-            )
-        ) {
-            player.position.x = nextX;
-        }
-
-        if (
-            coinField.canStandAt(
-                player.position.x,
-                nextZ,
-                PLAYER_RADIUS
-            )
-        ) {
-            player.position.z = nextZ;
+        if (!coinField.canStandAt(
+            camera.position.x,
+            camera.position.z,
+            PLAYER_RADIUS
+        )) {
+            camera.position.x = oldX;
         }
     }
 
-    // Spieler bleibt auf der obersten Münzschicht
-    controls.getObject().position.y =
-        TOP_COIN_Y + PLAYER_HEIGHT;
+    if (moveZ !== 0) {
+
+        controls.moveForward(moveZ);
+
+        if (!coinField.canStandAt(
+            camera.position.x,
+            camera.position.z,
+            PLAYER_RADIUS
+        )) {
+            camera.position.z = oldZ;
+        }
+    }
+
+    camera.position.y =
+        coinField.topY + PLAYER_HEIGHT;
 }
 
 // ========================================
-// RESIZE
+// ANIMATION
+// ========================================
+
+const clock = new THREE.Clock();
+
+let animationId = 0;
+
+function animate() {
+
+    animationId = requestAnimationFrame(animate);
+
+    // Wenn der Tab nicht sichtbar ist,
+    // keine unnötigen 3D-Berechnungen ausführen.
+    if (document.hidden) return;
+
+    const delta = Math.min(clock.getDelta(), 0.033);
+
+    movePlayer(delta);
+
+    coinInteraction.update(delta);
+
+    lagOptimizer.update(delta);
+
+    renderer.render(scene, camera);
+}
+
+animate();
+
+// ========================================
+// FENSTERGRÖSSE
 // ========================================
 
 window.addEventListener("resize", () => {
@@ -513,45 +612,17 @@ window.addEventListener("resize", () => {
 
     camera.updateProjectionMatrix();
 
-    renderer.setSize(
-        window.innerWidth,
-        window.innerHeight
-    );
-
-    renderer.setPixelRatio(
-        Math.min(window.devicePixelRatio, 1.5)
-    );
+    lagOptimizer.resize();
 });
 
 // ========================================
-// GAME LOOP
+// LADEN BEENDET
 // ========================================
 
-const clock = new THREE.Clock();
-
-function animate() {
-
-    requestAnimationFrame(animate);
-
-    const delta = Math.min(
-        clock.getDelta(),
-        0.05
-    );
-
-    updatePlayer(delta);
-
-    renderer.render(scene, camera);
-}
-
-animate();
-
 document.getElementById("loading").style.display = "none";
-
-console.log("BUNKER READY");
-console.log("TOTAL COINS:", coinField.total);
-console.log("COIN MODULE:", "coin.js");
-console.log("TOP SURFACE:", TOP_COIN_Y);
+startScreen.style.display = "flex";
 
 </script>
+
 </body>
 </html>
